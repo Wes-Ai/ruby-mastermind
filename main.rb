@@ -40,20 +40,20 @@ end
 
 module Display
   def display_game_board
-    puts '          +-----------------------------------------------+'
-    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O    |'
-    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O    |'
-    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O    |'
-    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O    |'
-    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O    |'
-    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O    |'
-    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O    |'
-    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O    |'
-    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O    |'
-    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O    |'
-    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O    |'
-    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O    |'
-    puts '          +-----------------------------------------------+'
+    puts '          +---------------+--------------+---------------+'
+    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O   |'.blue
+    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O   |'.red
+    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O   |'.magenta
+    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O   |'.green
+    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O   |'
+    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O   |'
+    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O   |'
+    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O   |'
+    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O   |'
+    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O   |'
+    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O   |'
+    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O   |'
+    puts '          +---------------+--------------+---------------+'
   end
 end
 
