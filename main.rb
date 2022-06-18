@@ -1,4 +1,4 @@
-# This allows console text to be colored
+# This allows console teOt to be colored
 # Thanks to: https://stackoverflow.com/questions/1489183
 class String
   def black;          "\e[30m#{self}\e[0m" end
@@ -40,20 +40,20 @@ end
 
 module Display
   def display_game_board
-    puts '          +---------------------------------+'
-    puts '          |   O  O    X  X  X  X    O  O    |'
-    puts '          |   O  O    X  X  X  X    O  O    |'
-    puts '          |   O  O    X  X  X  X    O  O    |'
-    puts '          |   O  O    X  X  X  X    O  O    |'
-    puts '          |   O  O    X  X  X  X    O  O    |'
-    puts '          |   O  O    X  X  X  X    O  O    |'
-    puts '          |   O  O    X  X  X  X    O  O    |'
-    puts '          |   O  O    X  X  X  X    O  O    |'
-    puts '          |   O  O    X  X  X  X    O  O    |'
-    puts '          |   O  O    X  X  X  X    O  O    |'
-    puts '          |   O  O    X  X  X  X    O  O    |'
-    puts '          |   O  O    X  X  X  X    O  O    |'
-    puts '          +---------------------------------+'
+    puts '          +-----------------------------------------------+'
+    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O    |'
+    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O    |'
+    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O    |'
+    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O    |'
+    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O    |'
+    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O    |'
+    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O    |'
+    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O    |'
+    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O    |'
+    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O    |'
+    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O    |'
+    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O    |'
+    puts '          +-----------------------------------------------+'
   end
 end
 
