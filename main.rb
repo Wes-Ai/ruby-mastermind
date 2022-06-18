@@ -27,7 +27,7 @@ class String
 end
 
 module Logic
-  def get_user_input
+  def user_input
     gets.chomp
   end
 end
@@ -42,7 +42,7 @@ class Player
 
   end
 
-  def choose_code
+  def select_code
 
   end
 
@@ -52,10 +52,14 @@ class Player
 end
 
 class Computer < Player
-  def initialize; end
+  attr_accessor :name
+  def initialize
+    @name = 'CPU'
+    @random_code = nil
+  end
 
-  def random_code
-
+  def select_code
+    @random_code = %w(red red red red)
   end
 end
 
@@ -88,7 +92,12 @@ module Display
   end
 
   def display_selecting_code(name)
-    puts "#{name} is selecting a random code..."
+    print "#{name} is selecting a random code."
+    sleep(0.5)
+    print '.'
+    sleep(0.5)
+    print ".\n"
+    sleep(1)
   end
 
   def display_welcome
@@ -109,6 +118,10 @@ module Display
   def display_computer_or_human
     puts 'What is the second players name? Enter "CPU" for a CPU opponent.'
   end
+
+  def display_enter_4_guesses
+    puts 'Enter your 4 guesses with a space between:'
+  end
 end
 
 class Board
@@ -119,10 +132,37 @@ class Board
     @player1 = nil
     @player2 = nil
     @decode_colors = { red: 0, blue: 1, green: 2, magenta: 3, cyan: 4, orange: 5 }
+    @turn_count = 1
+    @game_won = false
+    @code_to_break = []
+    @guess_array = []
   end
 
   def begin_game
     startup_sequence
+    display_selecting_code(@player2.name)
+    @code_to_break = @player2.select_code
+    until @turn_count >= 12 || @game_won
+      play_round
+
+
+      @turn_count += 1
+    end
+  end
+
+  def play_round
+    display_enter_4_guesses
+    @guess_array << user_input.split(' ')
+    check_guesses
+  end
+
+  def check_guesses
+    # if @guess_array[turn_count] = any? @code_to_break
+    #     check for position
+    #     check for similarity
+    #     update new array with correct position amt, 
+    #       correct similarity amt
+    # run display updater, pass 2 arrays (guess, position amt)
   end
 
   def startup_sequence
@@ -133,15 +173,13 @@ class Board
 
   def assign_players
     display_human_choose_name
-    @player1 = Player.new(get_user_input)
+    @player1 = Player.new(user_input)
     display_computer_or_human
-    user_decision = get_user_input
+    user_decision = user_input
     if user_decision.upcase.eql?('CPU')
       @player2 = Computer.new
-      p 'chose Cpu'
     else
       @player2 = Player.new(user_decision)
-      p 'chose 2nd player'
     end
   end
 end
