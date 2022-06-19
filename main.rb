@@ -59,7 +59,7 @@ class Computer < Player
   end
 
   def select_code
-    @random_code = %w(red red red red)
+    @random_code = %w(green green red red)
   end
 end
 
@@ -122,6 +122,10 @@ module Display
   def display_enter_4_guesses
     puts 'Enter your 4 guesses with a space between:'
   end
+
+  def display_guesser_winner_message
+    puts 'Congratulations! The code has been broken!'
+  end
 end
 
 class Board
@@ -132,20 +136,19 @@ class Board
     @player1 = nil
     @player2 = nil
     @decode_colors = { red: 0, blue: 1, green: 2, magenta: 3, cyan: 4, orange: 5 }
-    @turn_count = 1
+    @turn_count = 0
     @game_won = false
     @code_to_break = []
     @guess_array = []
+    @feedback_array = []
   end
 
   def begin_game
     startup_sequence
     display_selecting_code(@player2.name)
     @code_to_break = @player2.select_code
-    until @turn_count >= 12 || @game_won
+    until @turn_count >= 11 || @game_won
       play_round
-
-
       @turn_count += 1
     end
   end
@@ -153,6 +156,7 @@ class Board
   def play_round
     display_enter_4_guesses
     @guess_array << user_input.split(' ')
+    print @guess_array[@turn_count]
     check_guesses
   end
 
@@ -160,9 +164,47 @@ class Board
     # if @guess_array[turn_count] = any? @code_to_break
     #     check for position
     #     check for similarity
-    #     update new array with correct position amt, 
+    #     update new array with correct position amt,
     #       correct similarity amt
     # run display updater, pass 2 arrays (guess, position amt)
+
+    if @guess_array[@turn_count].eql?(@code_to_break)
+      display_guesser_winner_message
+      @game_won = true
+    else
+      puts #TODOOODODODOODODOODODOOOOOOOOOOOOOOOOOOOOOOOOOOOOOoo
+      p "Specific hits: #{check_match_in_specific_position}"
+      p "Any hits: #{check_match_in_any_board_position}"
+    end
+  end
+
+  def check_match_in_any_board_position
+    any_position_match = 0
+    temp_guesses = Marshal.load(Marshal.dump(@guess_array[@turn_count]))
+    temp_code = Marshal.load(Marshal.dump(@code_to_break))
+    for i in 0..@code_to_break.length - 1 do
+      for k in 0..temp_code.length - 1 do
+        if temp_guesses[i] == temp_code[k]
+          # Replaces copies with useless info, so they're not picked
+          # up during the next iteration.
+          temp_guesses[i] = "Dill#{i}"
+          temp_code[k] = "Pickle#{k}"
+          any_position_match += 1
+          break
+        end
+      end
+    end
+    any_position_match
+  end
+
+  def check_match_in_specific_position
+    specific_position_match = 0
+    for i in 0..@code_to_break.length - 1 do
+      if @guess_array[@turn_count][i] == @code_to_break[i]
+        specific_position_match += 1
+      end
+    end
+    specific_position_match
   end
 
   def startup_sequence
