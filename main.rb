@@ -102,10 +102,9 @@ module Display
   end
 
   def display_colors_available
-    puts "There are 6 colors available:\n> " + 'red'.bg_red.black + 
-         ', ' + 'blue'.bg_blue.black + ', ' + 'green'.bg_green.black + 
-         ', ' + 'purple'.bg_magenta.black + ', ' + 'cyan'.bg_cyan.black + 
-         ' & ' + 'orange'.bg_orange.black + '.'
+    puts "There are 6 colors available:\n> " + 'red'.bg_red.black +
+         ', ' + 'blue'.bg_blue.black + ', ' + 'green'.bg_green.black +
+         ', & ' + 'orange'.bg_orange.black + '.'
   end
 
   def display_computer_or_human
@@ -148,9 +147,7 @@ class Board
   def play_round
     display_enter_4_guesses
     @guess_array << user_input.split(' ')
-    print @guess_array[@turn_count]
     check_guesses
-    display_game_board(@guess_array, @feedback_array)
   end
 
   def check_guesses
@@ -159,6 +156,7 @@ class Board
       @game_won = true
     else
       build_feedback_array[@turn_count]
+      display_game_board(@guess_array, @feedback_array)
     end
   end
 
