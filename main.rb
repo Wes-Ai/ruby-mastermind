@@ -172,10 +172,30 @@ class Board
       display_guesser_winner_message
       @game_won = true
     else
-      puts #TODOOODODODOODODOODODOOOOOOOOOOOOOOOOOOOOOOOOOOOOOoo
       p "Specific hits: #{check_match_in_specific_position}"
       p "Any hits: #{check_match_in_any_board_position}"
+      p build_feedback_array[@turn_count]
     end
+  end
+
+  def build_feedback_array
+    store_feedback = ''
+    loop_count = 0
+    temp_specific = check_match_in_specific_position
+    temp_any = check_match_in_any_board_position - temp_specific
+    until loop_count == 4 do
+      if !temp_specific.zero?
+        store_feedback << ' S'
+        temp_specific -= 1
+      elsif !temp_any.zero?
+        store_feedback << ' A'
+        temp_any -= 1
+      else
+        store_feedback << ' O'
+      end
+      loop_count += 1
+    end
+    @feedback_array << store_feedback.split(' ')
   end
 
   def check_match_in_any_board_position
