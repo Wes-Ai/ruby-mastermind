@@ -74,21 +74,14 @@ class Human < Player
 end
 
 module Display
-  def display_game_board
-    puts '          +---------------+--------------+---------------+'
-    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O   |'
-    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O   |'
-    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O   |'
-    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O   |'
-    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O   |'
-    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O   |'
-    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O   |'
-    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O   |'
-    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O   |'
-    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O   |'
-    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O   |'
-    puts '          |   O  O  O  O  |  O  O  O  O  |  O  O  O  O   |'
-    puts '          +---------------+--------------+---------------+'
+  def display_game_board(game_array, feedback_array)
+    #TODOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+    spaces_five = "\t\t\t\t\t"
+    (0..game_array.length - 1).each do |i|
+      print spaces_five + spaces_five  + "top\n"
+      print spaces_five + game_array[i].join(' ') + feedback_array[i].join(' ') + "\n"
+      print spaces_five + spaces_five  + "bottom\n\n"
+    end
   end
 
   def display_selecting_code(name)
@@ -135,7 +128,6 @@ class Board
   def initialize
     @player1 = nil
     @player2 = nil
-    @decode_colors = { red: 0, blue: 1, green: 2, magenta: 3, cyan: 4, orange: 5 }
     @turn_count = 0
     @game_won = false
     @code_to_break = []
@@ -158,23 +150,15 @@ class Board
     @guess_array << user_input.split(' ')
     print @guess_array[@turn_count]
     check_guesses
+    display_game_board(@guess_array, @feedback_array)
   end
 
   def check_guesses
-    # if @guess_array[turn_count] = any? @code_to_break
-    #     check for position
-    #     check for similarity
-    #     update new array with correct position amt,
-    #       correct similarity amt
-    # run display updater, pass 2 arrays (guess, position amt)
-
     if @guess_array[@turn_count].eql?(@code_to_break)
       display_guesser_winner_message
       @game_won = true
     else
-      p "Specific hits: #{check_match_in_specific_position}"
-      p "Any hits: #{check_match_in_any_board_position}"
-      p build_feedback_array[@turn_count]
+      build_feedback_array[@turn_count]
     end
   end
 
@@ -183,7 +167,7 @@ class Board
     loop_count = 0
     temp_specific = check_match_in_specific_position
     temp_any = check_match_in_any_board_position - temp_specific
-    until loop_count == 4 do
+    until loop_count == 4
       if !temp_specific.zero?
         store_feedback << ' S'
         temp_specific -= 1
