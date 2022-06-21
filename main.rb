@@ -76,11 +76,12 @@ end
 module Display
   def display_game_board(game_array, feedback_array)
     #TODOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
-    spaces_five = "\t\t\t\t\t"
+    tabber = "\t"
+    header = tabber + "_______________________________________\n" +
+             tabber + "+-------- M A S T E R M I N D --------+\n\n"
+    print header
     (0..game_array.length - 1).each do |i|
-      print spaces_five + spaces_five  + "top\n"
-      print spaces_five + game_array[i].join(' ') + feedback_array[i].join(' ') + "\n"
-      print spaces_five + spaces_five  + "bottom\n\n"
+      print tabber + "          " + game_array[i].join(' ') + '  |  ' + feedback_array[i].join(' ') + "\n"
     end
   end
 
@@ -102,7 +103,7 @@ module Display
   end
 
   def display_colors_available
-    puts "There are 6 colors available:\n> " + 'red'.bg_red.black +
+    puts "There are 4 colors available:\n> " + 'red'.bg_red.black +
          ', ' + 'blue'.bg_blue.black + ', ' + 'green'.bg_green.black +
          ', & ' + 'orange'.bg_orange.black + '.'
   end
