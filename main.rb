@@ -30,6 +30,18 @@ module Logic
   def user_input
     gets.chomp
   end
+
+  def pick_random_colors(amount)
+    colors = %w[R B G P]
+    random_colors = []
+    i = 0
+    while i < amount
+      random_colors[i] = colors.sample
+      i += 1
+    end
+    p random_colors
+    random_colors
+  end
 end
 
 class Player
@@ -52,14 +64,16 @@ class Player
 end
 
 class Computer < Player
+  include Logic
   attr_accessor :name
+  
   def initialize
     @name = 'CPU'
     @random_code = nil
   end
 
   def select_code
-    @random_code = %w(green green red red)
+    pick_random_colors(4)
   end
 end
 
@@ -87,11 +101,12 @@ module Display
 
   def display_selecting_code(name)
     print "#{name} is selecting a random code."
-    sleep(0.5)
+    sleep(0.2)
     print '.'
-    sleep(0.5)
-    print ".\n"
-    sleep(1)
+    sleep(0.2)
+    print '.'
+    sleep(0.2)
+    print "\n"
   end
 
   def display_welcome
@@ -105,7 +120,7 @@ module Display
   def display_colors_available
     puts "There are 4 colors available:\n> " + 'red'.bg_red.black +
          ', ' + 'blue'.bg_blue.black + ', ' + 'green'.bg_green.black +
-         ', & ' + 'orange'.bg_orange.black + '.'
+         ', & ' + 'purple'.bg_magenta.black + '.'
   end
 
   def display_computer_or_human
@@ -118,6 +133,10 @@ module Display
 
   def display_guesser_winner_message
     puts 'Congratulations! The code has been broken!'
+  end
+
+  def display_incorrect_input_from_user(invalid_input_array)
+    puts "#{invalid_input_array} is not a valid input."
   end
 end
 
@@ -147,8 +166,25 @@ class Board
 
   def play_round
     display_enter_4_guesses
-    @guess_array << user_input.split(' ')
-    check_guesses
+    @guess_array << user_input.upcase.split(' ')
+    if check_correct_user_input
+      check_guesses
+    else
+      play_round
+    end
+  end
+
+  def check_correct_user_input
+    #TODOOOOOOOOOOOO def check length, def check type lol
+    p @guess_array[@turn_count].length
+    @guess_array[@turn_count].each do |guess|
+      unless guess == 'R' || guess == 'G' || guess == 'B' || guess == 'P'
+        display_incorrect_input_from_user(@guess_array[@turn_count])
+        @guess_array.delete_at(@turn_count)
+        return false
+      end
+    end
+    true
   end
 
   def check_guesses
