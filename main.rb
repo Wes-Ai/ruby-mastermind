@@ -175,10 +175,8 @@ class Board
   end
 
   def check_correct_user_input
-    #TODOOOOOOOOOOOO def check length, def check type lol
-    p @guess_array[@turn_count].length
     @guess_array[@turn_count].each do |guess|
-      unless guess == 'R' || guess == 'G' || guess == 'B' || guess == 'P'
+      unless @guess_array[@turn_count].length == 4 && (guess == 'R' || guess == 'G' || guess == 'B' || guess == 'P')
         display_incorrect_input_from_user(@guess_array[@turn_count])
         @guess_array.delete_at(@turn_count)
         return false
