@@ -44,52 +44,9 @@ module Logic
   end
 end
 
-class Player
-  def initialize(name)
-    @name = name
-
-  end
-
-  def play
-
-  end
-
-  def select_code
-
-  end
-
-  def give_hint
-
-  end
-end
-
-class Computer < Player
-  include Logic
-  attr_accessor :name
-  
-  def initialize
-    @name = 'CPU'
-    @random_code = nil
-  end
-
-  def select_code
-    pick_random_colors(4)
-  end
-end
-
-class Human < Player
-  def input_code
-
-  end
-
-  def input_hint
-
-  end
-end
-
 module Display
   def display_game_board(game_array, feedback_array)
-    #TODOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+    puts puts
     tabber = "\t"
     header = tabber + "_______________________________________\n" +
              tabber + "+-------- M A S T E R M I N D --------+\n\n"
@@ -97,6 +54,7 @@ module Display
     (0..game_array.length - 1).each do |i|
       print tabber + "          " + game_array[i].join(' ') + '  |  ' + feedback_array[i].join(' ') + "\n"
     end
+    puts puts
   end
 
   def display_selecting_code(name)
@@ -128,7 +86,7 @@ module Display
   end
 
   def display_enter_4_guesses
-    puts 'Enter your 4 guesses with a space between:'
+    puts 'Codebreaker, enter your 4 guesses with a space between:'
   end
 
   def display_guesser_winner_message
@@ -137,6 +95,54 @@ module Display
 
   def display_incorrect_input_from_user(invalid_input_array)
     puts "#{invalid_input_array} is not a valid input."
+  end
+
+  def display_invalid_input
+    puts 'That is invalid input.'
+  end
+
+  def display_ask_who_codemaker
+    puts 'Enter name of the code maker (blank for CPU):'
+  end
+end
+
+class Player
+  include Logic
+  include Display
+  attr_reader :name
+  def initialize(name)
+    @name = name
+  end
+
+  def select_code
+    puts 'Enter the secret code with 4 colors, for example: "R B G B":'
+    # TODO: User input validation on secret code,
+    #       refactor user_input_validation to work with any array.
+    secret_code = []
+    secret_code << user_input.upcase.split(' ')
+    secret_code[0]
+  end
+
+  def guess
+    display_enter_4_guesses
+    user_input.upcase.split(' ')
+  end
+end
+
+class Computer < Player
+  include Logic
+  def initialize
+    @name = 'CPU'
+  end
+
+  def select_code
+    pick_random_colors(4)
+  end
+
+  def guess
+    puts 'Selecting random guess...'
+    sleep(0.5)
+    pick_random_colors(4)
   end
 end
 
@@ -152,21 +158,21 @@ class Board
     @code_to_break = []
     @guess_array = []
     @feedback_array = []
+    @codemaker = nil
   end
 
   def begin_game
     startup_sequence
-    display_selecting_code(@player2.name)
-    @code_to_break = @player2.select_code
-    until @turn_count >= 11 || @game_won
+    display_selecting_code(@codemaker.name)
+    @code_to_break = @codemaker.select_code
+    until @turn_count >= 12 || @game_won
       play_round
       @turn_count += 1
     end
   end
 
   def play_round
-    display_enter_4_guesses
-    @guess_array << user_input.upcase.split(' ')
+    @guess_array << @codebreaker.guess
     if check_correct_user_input
       check_guesses
     else
@@ -251,16 +257,21 @@ class Board
   end
 
   def assign_players
-    display_human_choose_name
-    @player1 = Player.new(user_input)
-    display_computer_or_human
-    user_decision = user_input
-    if user_decision.upcase.eql?('CPU')
-      @player2 = Computer.new
+    display_ask_who_codemaker
+    answer = user_input
+    if answer.upcase.eql?('')
+      @codemaker = Computer.new
+      @codebreaker = Player.new(assign_human)
     else
-      @player2 = Player.new(user_decision)
+      @codemaker = Player.new(answer)
+      @codebreaker = Computer.new
     end
   end
+end
+
+def assign_human
+  puts 'You will be guessing against the CPU\'s secret code! What is your name?'
+  user_input
 end
 
 class Piece
