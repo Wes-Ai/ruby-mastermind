@@ -1,4 +1,4 @@
-# This allows console teOt to be colored
+# This allows console text to be colored
 # Thanks to: https://stackoverflow.com/questions/1489183
 class String
   def black;          "\e[30m#{self}\e[0m" end
@@ -41,6 +41,47 @@ module Logic
     end
     p random_colors
     random_colors
+  end
+
+  def convert_color_to_int(color)
+    color.downcase
+    case color
+    when 'red' || 'r'
+      1
+    when 'blue' || 'b'
+      2
+    when 'green' || 'g'
+      3
+    when 'purple' || 'p'
+      4
+    when 'cyan' || 'c'
+      5
+    when 'orange' || 'o'
+      6
+    else
+      puts 'Error when trying to convert color to int.'
+      -1
+    end
+  end
+
+  def convert_int_to_color(int)
+    case color
+    when 1
+      'Red'
+    when 2
+      'Blue'
+    when 3
+      'Green'
+    when 4
+      'Purple'
+    when 5
+      'Cyan'
+    when 6
+      'Orange'
+    else
+      puts 'Error when trying to convert int to color.'
+      -1
+    end
   end
 end
 
@@ -133,6 +174,7 @@ class Computer < Player
   include Logic
   def initialize
     @name = 'CPU'
+    @codes = [*1111..4444]
   end
 
   def select_code
@@ -140,7 +182,7 @@ class Computer < Player
   end
 
   def guess
-    puts 'Selecting random guess...'
+    puts 'Selecting computer\'s guess...'
     sleep(0.5)
     pick_random_colors(4)
   end
@@ -273,11 +315,6 @@ def assign_human
   puts 'You will be guessing against the CPU\'s secret code! What is your name?'
   user_input
 end
-
-class Piece
-
-end
-
 
 
 
