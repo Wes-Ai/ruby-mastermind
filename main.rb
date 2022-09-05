@@ -57,19 +57,19 @@ module Logic
   end
 
   def pretty_print_int_to_color(int)
-    case color
+    case int
     when 1
-      'Red'
+      'R'
     when 2
-      'Blue'
+      'B'
     when 3
-      'Green'
+      'G'
     when 4
-      'Purple'
+      'P'
     when 5
-      'Cyan'
+      'C'
     when 6
-      'Orange'
+      'O'
     else
       puts 'Error when trying to convert int to color.'
       -1
@@ -78,6 +78,10 @@ module Logic
 
   def convert_color_array_to_int(color_code)
     color_code.map {|color| convert_color_to_int(color)}
+  end
+
+  def convert_int_array_to_color(int_array)
+    int_array.map {|int| pretty_print_int_to_color(int)}
   end
 end
 
@@ -89,7 +93,7 @@ module Display
              tabber + "+-------- M A S T E R M I N D --------+\n\n"
     print header
     (0..game_array.length - 1).each do |i|
-      print tabber + "          " + game_array[i].join(' ') + '  |  ' + feedback_array[i].join(' ') + "\n"
+      print tabber + "          " + convert_int_array_to_color(game_array[i]).join(' ')  + '  |  ' + feedback_array[i].join(' ') + "\n"
     end
     puts puts
   end
@@ -273,8 +277,6 @@ class Board
           # up during the next iteration.
           temp_guesses[i] = "Dill#{i}"
           temp_code[k] = "Pickle#{k}"
-          p temp_guesses
-          p temp_code
           any_position_match += 1
           break
         end
