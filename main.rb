@@ -31,32 +31,24 @@ module Logic
     gets.chomp
   end
 
-  def pick_random_colors(amount)
-    colors = %w[R B G P]
-    random_colors = []
-    i = 0
-    while i < amount
-      random_colors[i] = colors.sample
-      i += 1
-    end
-    p random_colors
-    random_colors
+  def pick_random_code(amount)
+    p Array.new(amount) { rand(1...4) }
   end
 
   def convert_color_to_int(color)
-    color.downcase
+    color.upcase
     case color
-    when 'red' || 'r'
+    when 'RED', 'R'
       1
-    when 'blue' || 'b'
+    when 'BLUE', 'B'
       2
-    when 'green' || 'g'
+    when 'GREEN', 'G'
       3
-    when 'purple' || 'p'
+    when 'PURPLE', 'P'
       4
-    when 'cyan' || 'c'
+    when 'CYAN', 'C'
       5
-    when 'orange' || 'o'
+    when 'ORANGE', 'O'
       6
     else
       puts 'Error when trying to convert color to int.'
@@ -64,7 +56,7 @@ module Logic
     end
   end
 
-  def convert_int_to_color(int)
+  def pretty_print_int_to_color(int)
     case color
     when 1
       'Red'
@@ -82,6 +74,10 @@ module Logic
       puts 'Error when trying to convert int to color.'
       -1
     end
+  end
+
+  def convert_color_array_to_int(color_code)
+    color_code.map {|color| convert_color_to_int(color)}
   end
 end
 
@@ -160,13 +156,15 @@ class Player
     # TODO: User input validation on secret code,
     #       refactor user_input_validation to work with any array.
     secret_code = []
-    secret_code << user_input.upcase.split(' ')
+    # Convert user_input to number values
+    color_code << user_input.upcase.split(' ')
+    convert_color_array_to_int(color_code)
     secret_code[0]
   end
 
   def guess
     display_enter_4_guesses
-    user_input.upcase.split(' ')
+    p convert_color_array_to_int(user_input.upcase.split(' '))
   end
 end
 
@@ -175,16 +173,17 @@ class Computer < Player
   def initialize
     @name = 'CPU'
     @codes = [*1111..4444]
+    @current_guess = 1122 
   end
 
   def select_code
-    pick_random_colors(4)
+    pick_random_code(4)
   end
 
   def guess
     puts 'Selecting computer\'s guess...'
     sleep(0.5)
-    pick_random_colors(4)
+    pick_random_code(4)
   end
 end
 
@@ -224,7 +223,7 @@ class Board
 
   def check_correct_user_input
     @guess_array[@turn_count].each do |guess|
-      unless @guess_array[@turn_count].length == 4 && (guess == 'R' || guess == 'G' || guess == 'B' || guess == 'P')
+      unless @guess_array[@turn_count].length == 4
         display_incorrect_input_from_user(@guess_array[@turn_count])
         @guess_array.delete_at(@turn_count)
         return false
@@ -274,6 +273,8 @@ class Board
           # up during the next iteration.
           temp_guesses[i] = "Dill#{i}"
           temp_code[k] = "Pickle#{k}"
+          p temp_guesses
+          p temp_code
           any_position_match += 1
           break
         end
