@@ -6,7 +6,7 @@ class String
   def green;          "\e[32m#{self}\e[0m" end
   def orange;          "\e[33m#{self}\e[0m" end
   def blue;           "\e[34m#{self}\e[0m" end
-  def magenta;        "\e[35m#{self}\e[0m" end
+  def purple;        "\e[35m#{self}\e[0m" end
   def cyan;           "\e[36m#{self}\e[0m" end
   def gray;           "\e[37m#{self}\e[0m" end
   
@@ -15,7 +15,7 @@ class String
   def bg_green;       "\e[42m#{self}\e[0m" end
   def bg_orange;       "\e[43m#{self}\e[0m" end
   def bg_blue;        "\e[44m#{self}\e[0m" end
-  def bg_magenta;     "\e[45m#{self}\e[0m" end
+  def bg_purple;     "\e[45m#{self}\e[0m" end
   def bg_cyan;        "\e[46m#{self}\e[0m" end
   def bg_gray;        "\e[47m#{self}\e[0m" end
   
@@ -59,13 +59,13 @@ module Logic
   def pretty_print_int_to_color(int)
     case int
     when 1
-      'R'
+      'R'.bg_red
     when 2
-      'B'
+      'B'.bg_blue
     when 3
-      'G'
+      'G'.bg_green
     when 4
-      'P'
+      'P'.bg_purple
     when 5
       'C'
     when 6
@@ -119,7 +119,7 @@ module Display
   def display_colors_available
     puts "There are 4 colors available:\n> " + 'red'.bg_red.black +
          ', ' + 'blue'.bg_blue.black + ', ' + 'green'.bg_green.black +
-         ', & ' + 'purple'.bg_magenta.black + '.'
+         ', & ' + 'purple'.bg_purple.black + '.'
   end
 
   def display_computer_or_human
