@@ -77,11 +77,11 @@ module Logic
   end
 
   def convert_color_array_to_int(color_code)
-    color_code.map {|color| convert_color_to_int(color)}
+    color_code.map { |color| convert_color_to_int(color) }
   end
 
   def convert_int_array_to_color(int_array)
-    int_array.map {|int| pretty_print_int_to_color(int)}
+    int_array.map { |int| pretty_print_int_to_color(int) }
   end
 end
 
@@ -151,6 +151,7 @@ class Player
   include Logic
   include Display
   attr_reader :name
+
   def initialize(name)
     @name = name
   end
@@ -159,11 +160,9 @@ class Player
     puts 'Enter the secret code with 4 colors, for example: "R B G B":'
     # TODO: User input validation on secret code,
     #       refactor user_input_validation to work with any array.
-    secret_code = []
-    # Convert user_input to number values
+    color_code = []
     color_code << user_input.upcase.split(' ')
-    convert_color_array_to_int(color_code)
-    secret_code[0]
+    convert_color_array_to_int(color_code[0])
   end
 
   def guess
@@ -188,6 +187,10 @@ class Computer < Player
     puts 'Selecting computer\'s guess...'
     sleep(0.5)
     pick_random_code(4)
+  end
+
+  def feedback
+    send_feedback_to_CPU
   end
 end
 
@@ -242,6 +245,9 @@ class Board
       @game_won = true
     else
       build_feedback_array[@turn_count]
+      if @codemaker.name == 'CPU'
+        send_feedback_to_CPU
+      end
       display_game_board(@guess_array, @feedback_array)
     end
   end
@@ -293,6 +299,10 @@ class Board
       end
     end
     specific_position_match
+  end
+
+  def send_feedback_to_CPU
+    @codebreaker.feedback = [check_match_in_any_board_position - check_match_in_specific_position, check_match_in_specific_position]
   end
 
   def startup_sequence
