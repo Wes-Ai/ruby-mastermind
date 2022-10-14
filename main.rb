@@ -177,6 +177,7 @@ class Computer < Player
     @name = 'CPU'
     @codes = [*1111..4444]
     @current_guess = 1122 
+    @feedback = []
   end
 
   def select_code
@@ -187,10 +188,19 @@ class Computer < Player
     puts 'Selecting computer\'s guess...'
     sleep(0.5)
     pick_random_code(4)
+
+    #example: code = [1 2 3 4]
+
+    #guess = [1 1 2 2]
+    #if turn count > 1
+    #   eliminate all pairs
+    #   eliminate all 3x
+    #   elimate all 4x
+    
   end
 
-  def feedback
-    send_feedback_to_CPU
+  def feedback(any, specific)
+    p "any: " + any.to_s + ", specific: " + specific.to_s
   end
 end
 
@@ -245,7 +255,7 @@ class Board
       @game_won = true
     else
       build_feedback_array[@turn_count]
-      if @codemaker.name == 'CPU'
+      if @codebreaker.name == 'CPU'
         send_feedback_to_CPU
       end
       display_game_board(@guess_array, @feedback_array)
@@ -296,13 +306,13 @@ class Board
     for i in 0..@code_to_break.length - 1 do
       if @guess_array[@turn_count][i] == @code_to_break[i]
         specific_position_match += 1
-      end
+      end 
     end
     specific_position_match
   end
 
   def send_feedback_to_CPU
-    @codebreaker.feedback = [check_match_in_any_board_position - check_match_in_specific_position, check_match_in_specific_position]
+    @codebreaker.feedback(check_match_in_any_board_position - check_match_in_specific_position, check_match_in_specific_position)
   end
 
   def startup_sequence
