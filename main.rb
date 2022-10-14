@@ -191,11 +191,30 @@ class Computer < Player
 
     #example: code = [1 2 3 4]
 
+    if current_guess == 1122
+      current_guess
+    else
+      split_guess = current_guess.to_s.scan(/d)
+      codes.each do |i|
+        #Split the code [1111] into an array [1, 1, 1, 1]
+        split_int = i.to_s.scan(/d)
+
+        int specific_match = 0;
+        int any_match = 0;
+
+        for k in 0..split_int.length - 1 do
+          if split_int[k] == split_guess[k]
+            specific_match += 1
+          elsif #any match code (look below)
+
+
     #guess = [1 1 2 2]
     #if turn count > 1
     #   eliminate all pairs
     #   eliminate all 3x
     #   elimate all 4x
+
+
     
   end
 
