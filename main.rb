@@ -176,7 +176,7 @@ class Computer < Player
   def initialize
     @name = 'CPU'
     @codes = [*1111..4444]
-    @current_guess = 1122 
+    @current_guess = 1123
     @feedback = []
   end
 
@@ -187,25 +187,44 @@ class Computer < Player
   def guess
     puts 'Selecting computer\'s guess...'
     sleep(0.5)
-    pick_random_code(4)
+    # pick_random_code(4)
 
     #example: code = [1 2 3 4]
 
     if current_guess == 1122
       current_guess
     else
-      split_guess = current_guess.to_s.scan(/d)
+      split_guess = current_guess.to_s.scan(/\d/)
+      # Loop through all the remaining possible codes, remove the codes
+      # that do not return the same answer as the current_guess
       codes.each do |i|
-        #Split the code [1111] into an array [1, 1, 1, 1]
-        split_int = i.to_s.scan(/d)
-
+        # Split the code [1111] into an array [1, 1, 1, 1]
+        split_possible_code = i.to_s.scan(/\d/)
         int specific_match = 0;
         int any_match = 0;
 
-        for k in 0..split_int.length - 1 do
-          if split_int[k] == split_guess[k]
+        # Run loop on the current_guess array [1, 1, 1, 1] and checks
+        # if a code in the remaining possible codes, returns the same
+        # amount of matches.
+        for k in 0..split_possible_code.length - 1 do
+          if split_possible_code[k] == split_guess[k]
             specific_match += 1
-          elsif #any match code (look below)
+          elsif 
+            # Replaces codes if they match, to avoid recursive adding
+            # and to get an accurate any_match value.
+            for j in 0..split_possible_code.length - 1 do
+              if split_possible_code[k] == split_guess[j]
+                split_possible_code[k] = "Dillio#{i}"
+                split_guess[j] = "Pickle#{j}"
+                any_match += 1
+                break
+              end
+            end
+          end
+        end
+      end
+    p "Any matches: " + any_match + " & specific: " + specific_match
+    end
 
 
     #guess = [1 1 2 2]
@@ -331,7 +350,8 @@ class Board
   end
 
   def send_feedback_to_CPU
-    @codebreaker.feedback(check_match_in_any_board_position - check_match_in_specific_position, check_match_in_specific_position)
+    @codebreaker.feedback(check_match_in_any_board_position - 
+      check_match_in_specific_position, check_match_in_specific_position)
   end
 
   def startup_sequence
