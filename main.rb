@@ -83,6 +83,42 @@ module Logic
   def convert_int_array_to_color(int_array)
     int_array.map { |int| pretty_print_int_to_color(int) }
   end
+
+  # Tests matches and returns feedback in the form of [exact, any] matches
+  def test_split_guess_to_code(split_code, split_guess)
+    exact = check_exact_match(split_code, split_guess)
+    temp_any = check_any_match(split_code, split_guess)
+    any = temp_any - exact
+
+    return [exact, any]
+  end
+  # Simply checks if code[0] == guess[0]
+  def check_exact_match(split_code, split_guess)
+    exact_match = 0
+    for i in 0..split_code.length - 1 do
+      if split_code[i] == split_guess[i]
+        exact_match += 1
+      end
+    end
+    exact_match
+  end
+  # TODO: Lousy implementation, could be improved.
+  # Checks every value of each array against eachother,
+  # while avoiding duplicate answers.
+  def check_any_match(split_code, split_guess)
+    any_match = 0
+    for i in 0..split_code.length - 1 do
+      for j in 0..split_code.length - 1 do
+        if split_code[i] == split_guess[j]
+          any_match += 1
+          # Replace the matching elements to avoid dupes
+          split_code[i] = "Pickle#{j}"
+          split_guess[j] = "Dillio#{i}"
+        end
+      end
+    end
+    any_match
+  end
 end
 
 module Display
@@ -191,22 +227,25 @@ class Computer < Player
 
     #example: code = [1 2 3 4]
 
-    if current_guess == 1122
-      current_guess
+    specific_match = 0;
+      any_match = 0;
+
+    if @current_guess == 1122
+      @current_guess
     else
-      split_guess = current_guess.to_s.scan(/\d/)
+      split_guess = @current_guess.to_s.scan(/\d/)
       # Loop through all the remaining possible codes, remove the codes
       # that do not return the same answer as the current_guess
-      codes.each do |i|
+      @codes.each do |i|
         # Split the code [1111] into an array [1, 1, 1, 1]
         split_possible_code = i.to_s.scan(/\d/)
-        int specific_match = 0;
-        int any_match = 0;
+        
 
         # Run loop on the current_guess array [1, 1, 1, 1] and checks
         # if a code in the remaining possible codes, returns the same
         # amount of matches.
         for k in 0..split_possible_code.length - 1 do
+          ##### return_feedback(split_possible_code, split_guess)
           if split_possible_code[k] == split_guess[k]
             specific_match += 1
           elsif 
@@ -223,7 +262,7 @@ class Computer < Player
           end
         end
       end
-    p "Any matches: " + any_match + " & specific: " + specific_match
+    p "Any matches: " + any_match.to_s + " & specific: " + specific_match.to_s
     end
 
 
@@ -381,4 +420,6 @@ end
 
 
 test = Board.new
-test.begin_game
+#test.begin_game
+
+p test.test_split_guess_to_code([2, 2, 1, 2], [1, 1, 2, 2])
