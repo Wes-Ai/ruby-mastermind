@@ -51,7 +51,7 @@ module Logic
     when 'ORANGE', 'O'
       6
     else
-      puts 'Error when trying to convert color to int.'
+      puts 'Error when trying to convert color to int: ' + color.to_s
       -1
     end
   end
@@ -85,7 +85,7 @@ module Logic
   end
 
   # Tests matches and returns feedback in the form of [exact, any] matches
-  def test_split_guess_to_code(split_code, split_guess)
+  def test_split_code_to_guess(split_code, split_guess)
     exact = check_exact_match(split_code, split_guess)
     temp_any = check_any_match(split_code, split_guess)
     any = temp_any - exact
@@ -212,7 +212,7 @@ class Computer < Player
   def initialize
     @name = 'CPU'
     @codes = [*1111..4444]
-    @current_guess = 1123
+    @current_guess = 1122
     @feedback = []
   end
 
@@ -222,7 +222,7 @@ class Computer < Player
 
   def guess
     puts 'Selecting computer\'s guess...'
-    sleep(0.5)
+    sleep(0.2)
     # pick_random_code(4)
 
     #example: code = [1 2 3 4]
@@ -239,30 +239,17 @@ class Computer < Player
       @codes.each do |i|
         # Split the code [1111] into an array [1, 1, 1, 1]
         split_possible_code = i.to_s.scan(/\d/)
-        
+        feedback = test_split_code_to_guess(split_possible_code, split_guess)
 
-        # Run loop on the current_guess array [1, 1, 1, 1] and checks
-        # if a code in the remaining possible codes, returns the same
-        # amount of matches.
-        for k in 0..split_possible_code.length - 1 do
-          ##### return_feedback(split_possible_code, split_guess)
-          if split_possible_code[k] == split_guess[k]
-            specific_match += 1
-          elsif 
-            # Replaces codes if they match, to avoid recursive adding
-            # and to get an accurate any_match value.
-            for j in 0..split_possible_code.length - 1 do
-              if split_possible_code[k] == split_guess[j]
-                split_possible_code[k] = "Dillio#{i}"
-                split_guess[j] = "Pickle#{j}"
-                any_match += 1
-                break
-              end
-            end
-          end
+        if feedback[0] == 0 && feedback[1] == 0
+          p "deleting element... " + @codes[i].to_s
+          @codes.delete_at(i)
         end
       end
-    p "Any matches: " + any_match.to_s + " & specific: " + specific_match.to_s
+
+      p "picking next guess: "
+      @current_guess = @codes[0]
+      return @current_guess.to_s.scan(/\d/)
     end
 
 
@@ -420,6 +407,6 @@ end
 
 
 test = Board.new
-#test.begin_game
+test.begin_game
 
-p test.test_split_guess_to_code([2, 2, 1, 2], [1, 1, 2, 2])
+#p test.test_split_code_to_guess([2, 2, 1, 2], [1, 1, 2, 2])
